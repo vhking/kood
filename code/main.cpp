@@ -23,7 +23,7 @@ struct PlatformCharacter
 
 // size of the whole array devided by the size of one element
 #define array_count(static_array) (sizeof(static_array)/ sizeof(*(static_array)))
-#define build_string(static_string) { (c8 *) static_string, array_count(static_string) }
+#define build_string(static_string) { (c8 *) static_string, array_count(static_string) - 1}
 
 void insert(String *text, u32 *text_cursor, u64 max_count, c8 character) {
 	if (text->count < max_count) {
