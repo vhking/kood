@@ -101,8 +101,8 @@ int main()
 	unsigned char text_buffer[1024];
 
 	String text;
-	text.base  = text_buffer;
-	text.count = 0;
+	text.base  		= text_buffer;
+	text.count 		= 0;
 	u32 text_cursor = 0;
 
 	bool running = true; 
@@ -118,14 +118,14 @@ int main()
 				case WM_CHAR:
 				{
 					push_char(platform_characters, &platform_character_count, array_count(platform_characters), msg.wParam, true);	
-					//InvalidateRect(window_handle, NULL, TRUE); // xxx forces the window to be redrawn
+					InvalidateRect(window_handle, NULL, TRUE); // xxx forces the window to be redrawn
 					
 				} break;
 
 				case WM_KEYDOWN:
 				{
 					push_char(platform_characters, &platform_character_count, array_count(platform_characters), msg.wParam, false);
-					//InvalidateRect(window_handle, NULL, TRUE); // xxx forces the window to be redrawn
+					InvalidateRect(window_handle, NULL, TRUE); // xxx forces the window to be redrawn
 					
 				} break;
 
@@ -229,8 +229,6 @@ int main()
 			DispatchMessage(&msg);
 		}
 
-		InvalidateRect(window_handle, NULL, TRUE); // xxx forces the window to be redrawn
-		
 		Sleep(10);
 	}
 
