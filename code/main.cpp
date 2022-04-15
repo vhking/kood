@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <windows.h>
 
+#include <assert.h> 
+
 //#pragma comment(lib, "user32.lib");
 
 typedef unsigned char c8;
@@ -131,8 +133,8 @@ int main()
 
 				case WM_PAINT:
 				{
-					for (u32 count = 0; count < platform_character_count; count++) {
-						PlatformCharacter character = platform_characters[count];
+					for (u32 index = 0; index < platform_character_count; index++) {
+						PlatformCharacter character = platform_characters[index];
 
 						printf("char 1: %i %c \n", (int)character.code, (char)character.code);
 
@@ -162,39 +164,42 @@ int main()
 							{
 								case VK_HOME: 
 								{
-									printf("home before %d \n", text_cursor);
-									text_cursor = 0;
-									printf("home after %d \n", text_cursor);
+									i32 index = text_cursor;
+									while (index != 0) {
+										if((char)text.base[index-1] == '\n')
+											break;
+
+										index--;
+									}
+
+									text_cursor = index;
 
 								} break;
 								case VK_END: 
 								{
-									printf("end before %d \n", text_cursor);
-
-									u32 count = 0;
-									while (count < text.count) {
-										if ((char)text.base[count] == '\n') {
-											printf("found it at %d look %c \n", count,(char)text.base[count]);
+									i32 index = text_cursor;
+									while (index != text.count) {
+										if((char)text.base[index] == '\n')
 											break;
-										} 
-										printf("Not here %d look %c \n", count, (char)text.base[count]);
-										count += 1;
+
+										index++;
 									}
 
-									text_cursor += count;
+									text_cursor = index;
 
-									printf("end after %d \n", text_cursor);
 								} break;
 								case VK_LEFT: // left arrow
 								{
 									if(text_cursor > 0)
 										text_cursor -= 1;
+
 								} break;
 
 								case VK_RIGHT: // right arrow
 								{
 									if(text_cursor < text.count)
 										text_cursor += 1;
+
 								} break;
 							}
 						}
@@ -218,9 +223,7 @@ int main()
 
 					DrawText(device_contex, (char *)text.base, (int)text.count, &rect, DT_LEFT);
 
-
 					EndPaint(window_handle, &paint);
-
 					
 				} break;
 			}
